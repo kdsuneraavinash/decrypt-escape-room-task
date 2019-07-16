@@ -26,6 +26,9 @@ class ChatMessageWidget extends StatelessWidget {
             bottomLeft: Radius.circular(5.0),
             bottomRight: Radius.circular(10.0),
           );
+    Color readCheckColor = chatMessage.delivered ? Colors.blue : Colors.black38;
+    IconData readCheckIcon =
+        chatMessage.delivered ? Icons.done_all : Icons.done;
 
     return Align(
       alignment: messageAlignment,
@@ -62,9 +65,9 @@ class ChatMessageWidget extends StatelessWidget {
                   SizedBox(width: 3.0),
                   if (!chatMessage.isResponse)
                     Icon(
-                      chatMessage.delivered ? Icons.done_all : Icons.done,
+                      readCheckIcon,
                       size: 12.0,
-                      color: Colors.black38,
+                      color: readCheckColor,
                     )
                 ],
               ),
