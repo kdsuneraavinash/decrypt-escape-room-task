@@ -1,3 +1,4 @@
 clear
 echo '[Initializing] Please Wait....'
-docker run -it --privileged decrypt-escaperoom-terminal
+cd src
+python3 serverhack.py
