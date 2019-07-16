@@ -5,6 +5,7 @@ import readline
 import terminal
 from file_system import *
 from solutions import Solutions
+import signal
 
 IP = '158.24.64.6'
 SOLUTIONS = None
@@ -100,6 +101,8 @@ def server_hack_task():
 
 
 if __name__ == "__main__":
+    signal.signal(signal.SIGTSTP, signal.SIG_IGN)
+
     SOLUTIONS = Solutions(1)
     terminal.clear_terminal()
 
