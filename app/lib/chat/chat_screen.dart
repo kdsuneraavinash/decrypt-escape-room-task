@@ -1,6 +1,5 @@
 import '../logic/chat_responder.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'chat_message_widget.dart';
@@ -21,7 +20,7 @@ class ChatScreen extends StatelessWidget {
           style: TextStyle(color: Colors.green),
         ),
         leading: Icon(
-          FontAwesomeIcons.robot,
+          Icons.verified_user,
           color: Colors.green,
         ),
         actions: <Widget>[

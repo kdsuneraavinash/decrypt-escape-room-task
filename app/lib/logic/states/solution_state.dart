@@ -8,7 +8,7 @@ class SolutionState extends ChatState {
   SolutionState(this.imageUrl);
 
   @override
-  sendMessage(ChatResponder responder, String message) {
+  sendMessage(ChatResponder responder, String message) async {
     DateTime time = DateTime.now();
 
     ChatMessage chatMessage = ChatMessage(
@@ -22,5 +22,10 @@ class SolutionState extends ChatState {
       responder.chatMessages.add(chatMessage);
       isSolutionSentOnce = true;
     }
+
+    responder.updated();
+    await Future.delayed(Duration(seconds: 1));
+    chatMessage.finishTyping();
+    responder.updated();
   }
 }

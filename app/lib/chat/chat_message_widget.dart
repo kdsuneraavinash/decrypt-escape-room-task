@@ -1,3 +1,4 @@
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 
 import '../logic/chat_responder.dart';
@@ -11,6 +12,9 @@ class ChatMessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (chatMessage.isResponse && chatMessage.isTyping)
+      return Align(alignment: Alignment.centerLeft, child: typing());
+
     if (chatMessage.isSolution) return escapeCode(chatMessage.message);
 
     Alignment messageAlignment =
@@ -99,12 +103,42 @@ class ChatMessageWidget extends StatelessWidget {
           bottomRight: Radius.circular(5.0),
         ),
         image: DecorationImage(
-          image: NetworkImage(
-              "https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg"),
+          image: AssetImage("assets/solutions/pexels-photo-414612.jpeg"),
           fit: BoxFit.cover,
         ),
       ),
       height: 200,
     );
+  }
+
+  Widget typing() {
+    return Container(
+        margin: EdgeInsets.all(4),
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 1,
+              spreadRadius: 1,
+              color: Color(0x22000000),
+            )
+          ],
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(5.0),
+            bottomLeft: Radius.circular(10.0),
+            bottomRight: Radius.circular(5.0),
+          ),
+        ),
+        child: SizedBox(
+          height: 15,
+          width: 60,
+          child: FlareActor(
+            "assets/loader.flr",
+            animation: "Loading",
+            color: Colors.black54,
+            fit: BoxFit.contain,
+          ),
+        ));
   }
 }

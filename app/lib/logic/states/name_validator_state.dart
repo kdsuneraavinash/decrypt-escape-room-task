@@ -5,7 +5,7 @@ import 'time_validator_state.dart';
 
 class NameValidatorState extends ChatState {
   @override
-  sendMessage(ChatResponder responder, String message) {
+  sendMessage(ChatResponder responder, String message) async {
     DateTime time = DateTime.now();
     bool isValid = false;
     String response =
@@ -25,6 +25,11 @@ class NameValidatorState extends ChatState {
         time: "${time.hour}:${time.minute}");
 
     responder.chatMessages.add(chatMessage);
+
+    responder.updated();
+    await Future.delayed(Duration(seconds: 2));
+    chatMessage.finishTyping();
+    responder.updated();
 
     if (isValid) {
       responder.state = TimeValidatorState(message.trim());

@@ -13,7 +13,6 @@ dependencies:
 
   cupertino_icons: ^0.1.2
   flare_flutter: ^1.5.4
-  font_awesome_flutter: ^8.5.0
   provider: ^3.0.0+1
 
 dev_dependencies:
@@ -26,3 +25,5 @@ flutter:
 
   assets:
    - assets/progress.flr
+   - assets/loader.flr
+   - assets/solutions/pexels-photo-414612.jpeg

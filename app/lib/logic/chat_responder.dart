@@ -13,6 +13,8 @@ class ChatResponder extends ChangeNotifier {
   }
 
   void recieveMessage(String message) async {
+    if (message.trim() == "") return;
+
     DateTime time = DateTime.now();
 
     ChatMessage chatMessage = ChatMessage(
@@ -22,18 +24,22 @@ class ChatResponder extends ChangeNotifier {
         time: "${time.hour}:${time.minute}");
 
     chatMessages.add(chatMessage);
-    notifyListeners();
+    updated();
 
     await Future.delayed(Duration(milliseconds: 800));
     chatMessage.delivered = true;
-    notifyListeners();
+    updated();
 
     sendMessage(message);
   }
 
   void sendMessage(String response) async {
     await Future.delayed(Duration(milliseconds: 1000));
-    state.sendMessage(this, response);
+    await state.sendMessage(this, response);
+    updated();
+  }
+
+  updated() {
     notifyListeners();
   }
 }
@@ -45,11 +51,17 @@ class ChatMessage {
     this.delivered,
     this.isResponse,
     this.isSolution = false,
+    this.isTyping = true,
   });
+
+  finishTyping() {
+    isTyping = false;
+  }
 
   final String message;
   final String time;
   final bool isResponse;
   bool delivered;
+  bool isTyping;
   final bool isSolution;
 }

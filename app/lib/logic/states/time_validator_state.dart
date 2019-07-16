@@ -9,7 +9,7 @@ class TimeValidatorState extends ChatState {
   TimeValidatorState(this.teamName);
 
   @override
-  sendMessage(ChatResponder responder, String message) {
+  sendMessage(ChatResponder responder, String message) async {
     DateTime time = DateTime.now();
     bool isValid = false;
     String response = "Record Mismatch... Please re-enter time.";
@@ -28,6 +28,11 @@ class TimeValidatorState extends ChatState {
         time: "${time.hour}:${time.minute}");
 
     responder.chatMessages.add(chatMessage);
+
+    responder.updated();
+    await Future.delayed(Duration(seconds: 3));
+    chatMessage.finishTyping();
+    responder.updated();
 
     if (isValid) {
       responder.state = SolutionState(Data.data[teamName].imageUrl);
