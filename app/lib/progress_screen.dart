@@ -26,7 +26,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
           child: FlareActor(
             "assets/progress.flr",
             animation: animation,
-            color: Colors.blueGrey[800],
+            color: Colors.green,
           ),
         ),
       ),
@@ -34,7 +34,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
   }
 
   void changeAnimation() async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 5));
     setState(() {
       animation = "Success";
     });
