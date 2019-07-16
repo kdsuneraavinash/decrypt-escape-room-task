@@ -22,3 +22,22 @@ pip3 install progressbar2 # Python library progressbar2
 cd src
 python3 serverhack.py # Run
 ```
+
+### Using Conda
+
+```bash
+conda create -n py3-cv python=3.7
+conda activate py3-cv
+
+conda install opencv # install opencv
+
+sudo apt-get install -y libsm6 libxext6 # opencv additional libraries
+sudo apt-get install -y libxrender-dev # opencv additional libraries
+
+conda install termcolor # Python library: Termcolor
+conda install progressbar2 # Python library progressbar2
+
+cd src
+python serverhack.py # Run
+```
+

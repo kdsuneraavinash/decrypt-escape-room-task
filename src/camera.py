@@ -43,6 +43,7 @@ def getPhotoFrame(file='snapshot.jpeg'):
 
 
 exit_pressed = False
+detected = False
 
 
 def signal_handler(signum, frame):
@@ -52,7 +53,7 @@ def signal_handler(signum, frame):
 
 def run_image_processor(solution_file):
     '''Main Entry Point'''
-    global exit_pressed
+    global exit_pressed, detected
     exit_pressed = False
 
     terminal.set_handler(signal_handler)
@@ -63,44 +64,49 @@ def run_image_processor(solution_file):
     aspect_ratio = height/width
 
     while not exit_pressed:
-        frame = getCameraFrame()
+        if detected:
+            art = ""
+            with open("assets/cameraclue.txt", 'r', encoding="utf-8") as f:
+                art = f.read().strip()
 
-        if frame is None:
-            # Frame lag - stop
-            break
-
-        frame, threshed, angle = imageprocess.process(frame)
-        frame = cv2.rotate(threshed, cv2.ROTATE_90_COUNTERCLOCKWISE)
-
-        if abs(angle - 45) < 8:
-            # Puzzle Solved
-            subprocess.call(['lp', solution_file])
-            time.sleep(5)
-            while True:
-                ind = random.randint(0, len(string.ascii_letters)-1)
-                s = string.ascii_letters[ind]
-                print(s, end="")
-                time.sleep(0.005)
-
-            # art = camera_clue
-            # frame_color = 'white'
-            # color = 'green'
-            # attrs = ['bold', 'underline']
-            # art = art.split('\n')
+            frame_color = 'white'
+            color = 'green'
+            attrs = ['bold', 'underline']
+            art = art.split('\n')
+            time.sleep(0.1)
         else:
-            frame = np.pad(frame, pad_width=1,
-                           mode='constant', constant_values=0)
-            art = ascii.frame_to_ascii_art(
-                frame, img_width, aspect_ratio, ascii.gscale1)
+            frame = getCameraFrame()
 
-            if angle == float("inf"):
-                frame_color = 'yellow'
-                color = 'white'
-                attrs = ['bold', 'blink']
+            if frame is None:
+                # Frame lag - stop
+                break
+
+            frame, threshed, angle = imageprocess.process(frame)
+            frame = cv2.rotate(threshed, cv2.ROTATE_90_COUNTERCLOCKWISE)
+
+            if detected or abs(angle - 45) < 8:
+                # Puzzle Solved
+                print("Detected... Printing...", solution_file)
+                subprocess.call(['lp', solution_file])
+                time.sleep(1)
+                terminal.clear_terminal()
+                time.sleep(1)
+
+                detected = True
             else:
-                frame_color = 'green'
-                color = 'green'
-                attrs = ['bold']
+                frame = np.pad(frame, pad_width=1,
+                               mode='constant', constant_values=0)
+                art = ascii.frame_to_ascii_art(
+                    frame, img_width, aspect_ratio, ascii.gscale1)
+
+                if angle == float("inf"):
+                    frame_color = 'yellow'
+                    color = 'white'
+                    attrs = ['bold', 'blink']
+                else:
+                    frame_color = 'green'
+                    color = 'green'
+                    attrs = ['bold']
 
         art = terminal.center(art)
         text = "="*width + '\n'

@@ -7,7 +7,7 @@ from termcolor import colored, cprint
 
 DEBUG = True
 TERMINAL_WIDTH = 170
-TERMINAL_HEIGHT = 77
+TERMINAL_HEIGHT = 73
 
 
 def center(s):
