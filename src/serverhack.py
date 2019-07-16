@@ -1,262 +1,46 @@
 import random
-import string
 import os
-from termcolor import colored, cprint
 import time
-import subprocess
 import readline
 import terminal
-import camera
-import importlib
-import codecs
+from file_system import *
+from solutions import Solutions
 
 IP = '158.24.64.6'
-SERVER_PASSWORD = '123'
-ENCRYPTION_KEY = ''
-
-
-class VirtualInstance:
-    def __init__(self, name):
-        self.name = name
-
-    def ls(self):
-        raise NotImplementedError()
-
-    def read(self):
-        raise NotImplementedError()
-
-    def extract(self, parent):
-        raise NotImplementedError()
-
-    def print(self):
-        raise NotImplementedError()
-
-    def run(self):
-        raise NotImplementedError()
-
-    @staticmethod
-    def list_command(current_directory):
-        for f in current_directory.ls():
-            if type(f) is VirtualFolder:
-                s = "{:>15}\t\tfolder".format(f.name)
-            else:
-                s = "{:>15}\t\t{} file\t{} bytes".format(
-                    f.name, f.name[-3:], f.size)
-            print(colored(s, 'cyan'))
-
-    @staticmethod
-    def read_file_command(current_directory, arg):
-        file = current_directory.get_file(arg)
-        if file != None:
-            print(colored(
-                file.read(),
-                'white',
-                attrs=['dark']
-            ))
-            print()
-        else:
-            print("file does not exist:", arg)
-
-    @staticmethod
-    def download_file_command(current_directory, zip_file, arg):
-        print("verifying url...")
-        terminal.show_progress(0.001, 100)
-        if arg.strip() in ['178.345.235.23/tools.zip',
-                           'http://178.345.235.23/tools.zip',
-                           'https://178.345.235.23/tools.zip',
-                           'ftp://178.345.235.23/tools.zip']:
-            print("downloading file...")
-            terminal.show_progress(0.08, 100)
-            current_directory.files.append(zip_file)
-            print(zip_file.name, "successfully downloaded from remote server")
-        else:
-            print("invalid url:", arg)
-
-    @staticmethod
-    def extract_file_command(current_directory, arg):
-        file = current_directory.get_file(arg)
-        if file != None:
-            terminal.show_progress(0.02, 100)
-            extracted = file.extract(current_directory)
-            current_directory.files.append(extracted)
-            print(file.name, "successfully extracted")
-        else:
-            print("file does not exist:", arg)
-
-    @staticmethod
-    def print_file_command(current_directory, arg):
-        file = current_directory.get_file(arg)
-        if file != None:
-            print(file.name, "printing...")
-            file.print()
-        else:
-            print("file does not exist:", arg)
-
-    @staticmethod
-    def run_file_command(current_directory, arg):
-        importlib.reload(camera)
-        file = current_directory.get_file(arg)
-        if file != None:
-            file.run()
-        else:
-            print("file does not exist:", arg)
-
-    @staticmethod
-    def help_command():
-        with open('assets/help.txt', 'r', encoding="utf-8") as f:
-            x = codecs.escape_decode(f.read().strip())[0].decode()
-        print(colored(
-            x,
-            'white'
-        ))
-
-
-class VirtualFolder(VirtualInstance):
-    def __init__(self, name, files, parent):
-        super().__init__(name)
-        self.parent = parent if parent != None else self
-        self.files = files
-
-    def ls(self):
-        self.files.sort(key=lambda a: ("0" if type(
-            a) is VirtualFolder else "1") + a.name)
-        return self.files
-
-    def path(self):
-        if self.parent == None or self.parent == self:
-            return ""
-        return self.parent.path() + "/" + self.name
-
-    def get_file(self, dir):
-        if dir == '.':
-            return self
-        if dir == '..':
-            return self.parent
-        for f in self.files:
-            if dir == f.name:
-                return f
-        else:
-            return None
-
-    def cd(self, dir):
-        f = self.get_file(dir)
-        if f is None:
-            return self
-        else:
-            if type(f) == VirtualFolder:
-                return f
-            else:
-                return self
-
-
-class VirtualFile(VirtualInstance):
-    def __init__(self, name, size, content):
-        super().__init__(name)
-        self.size = size
-        self.content = content
-
-    def read(self):
-        raise "not a valid executable python file: {}".format(self.name)
-
-    def read(self):
-        return self.generateRandomString(len(self.name) + self.size)
-
-    def extract(self, parent):
-        raise Exception(
-            "CRC Exception - File is not a valid archieve or the file is corrupted.")
-
-    def generateRandomString(self, seed):
-
-        def take_choices(l, n):
-            if type(l) is str:
-                l = list(l)
-            r = []
-            for i in range(n):
-                r.append(random.choice(l))
-            return r
-
-        return ''.join(
-            take_choices(
-                (string.ascii_uppercase + string.digits +
-                 string.ascii_lowercase + string.punctuation),
-                self.size
-            )
-        )
-
-
-class TextFile(VirtualFile):
-    def __init__(self, name, content):
-        super().__init__(name, len(content), content)
-
-    def read(self):
-        return self.content
-
-    def print(self):
-        print("text file is not a valid prinatable file")
-        return True
-
-
-class ZipFile(VirtualFile):
-    def __init__(self, name, ratio, content):
-        full_size = sum(map(lambda x: x.size, content), 0)*ratio + 10
-        super().__init__(name, int(full_size), content)
-
-    def extract(self, parent):
-        return VirtualFolder(self.name[:-4], self.content, parent)
-
-
-class PrintableFile(VirtualFile):
-    def __init__(self, name):
-        super().__init__(name, 12241, '')
-
-    def print(self):
-        subprocess.call(['lp', 'bookclue.jpeg'])
-        return True
-
-
-class ExecutableFile(VirtualFile):
-    def __init__(self, name, file):
-        super().__init__(name, 256, '')
-
-    def run(self):
-        camera.exit_pressed = False
-        print("File is encrypted with a key.")
-        x = input("encryption key: ")
-        if x == ENCRYPTION_KEY:
-            camera.run_image_processor()
-            time.sleep(1)
-            terminal.clear_terminal()
-        else:
-            print("Wrong password")
+SOLUTIONS = None
 
 
 def server_hack_task():
     terminal.clear_terminal()
-    with open('assets/head2.txt', 'r', encoding="utf-8") as f:
-        msg = colored(f.read().strip(), 'green', attrs=['bold'])
-        print(msg)
-    print()
+
+    head_gda = terminal.bold_green_text(
+        open_file_and_get_content('assets/head2.txt'))
+    print(f"{head_gda}\n")
 
     # Server log file
-    with open('assets/server_log.txt', 'r', encoding="utf-8-sig") as f:
-        server_log_text = f.read().strip()
+    server_log_text = open_file_and_get_content('assets/server_log.txt')
+    # Inline coloring of server log text
     server_log_text = '\033[1m'.join(server_log_text.split("$%B%$"))
     server_log_text = '\033[0m\033[37m\033[2m'.join(
         server_log_text.split("$%E%$"))
     server_log = TextFile('server.log', server_log_text)
 
     # Fake files
-    fake_file_1 = TextFile(
-        'g.txt', 'camera.exe requires an encryption key which is an addition of 2 strings.')
-    fake_file_2 = TextFile('dconf.txt', 'TIP:\nServers, firewalls, and other IT equipment keep log files that record important events and transactions. Log data can also provide information for identifying and troubleshooting equipment problems including configuration problems and hardware failure.')
-    fake_file_3 = TextFile('yuri.txt', '--- empty file ---')
-    fake_file_4 = TextFile(
-        'iporf.txt', 'TIP:\nReading unreadable files (ZIP/EXE/PDF/...) will show binary data. (Random unicode strings)')
-    fake_file_5 = TextFile('abcd.txt', '--- empty file ---')
+    fake_file_1 = TextFile('g.txt', open_file_and_get_content(
+        'assets/files/camera_tip.txt'))
+    fake_file_2 = TextFile('dconf.txt', open_file_and_get_content(
+        'assets/files/log_tip.txt'))
+    fake_file_3 = TextFile('yuri.txt', open_file_and_get_content(
+        'assets/files/empty_file.txt'))
+    fake_file_4 = TextFile('iporf.txt',  open_file_and_get_content(
+        'assets/files/exe_read.txt'))
+    fake_file_5 = TextFile('abcd.txt', open_file_and_get_content(
+        'assets/files/empty_file.txt'))
 
     # Zip file
-    printable_file = PrintableFile('cr.pdf')
-    cam_file = ExecutableFile('camera.exe', 'camera.py')
+    printable_file = PrintableFile('cr.pdf', SOLUTIONS.first_clue_pdf)
+    cam_file = ExecutableFile(
+        'camera.exe', 'camera.py', SOLUTIONS.encryption_key, SOLUTIONS.image_recognition_pdf)
     zip_file = ZipFile('tools.zip', 0.91, [
                        printable_file, fake_file_1, cam_file])
 
@@ -265,50 +49,48 @@ def server_hack_task():
     folder2 = VirtualFolder('usr', [fake_file_2, fake_file_3], None)
     folder3 = VirtualFolder('lib', [fake_file_5], None)
     root = VirtualFolder(
-        '', [cam_file, folder1, folder2, folder3, fake_file_4, cam_file], None)
+        '', [cam_file, folder1, folder2, folder3, fake_file_4], None)
     folder1.parent = root
     folder2.parent = root
     folder3.parent = root
 
+    # Handle commands
     current_directory = root
     while True:
         try:
-            x = input(colored(
-                'CE:' + IP + '-BASE:$~{}/ '.format(current_directory.path()),
-                'green',
-                attrs=['bold'])).strip()
+            x = input(terminal.bold_green_text(
+                f'CE:{IP}-BASE:$~{current_directory.path()}/ '.strip()))
             if x == '':
                 continue
             x = x.split()
             command = x.pop(0)
             arg = '.' if len(x) == 0 else x.pop(0)
 
-            if command == 'list':
+            if command in ['list', 'ls']:
                 VirtualInstance.list_command(current_directory)
-            elif command == 'cd':
+            elif command in ['cd']:
                 current_directory = current_directory.cd(arg)
-            elif command == 'read':
+            elif command in ['read']:
                 VirtualInstance.read_file_command(current_directory, arg)
-            elif command == 'download':
+            elif command in ['download']:
                 VirtualInstance.download_file_command(
                     current_directory, zip_file, arg)
-            elif command == 'extract':
+            elif command in ['extract', 'unzip']:
                 VirtualInstance.extract_file_command(current_directory, arg)
-            elif command == 'run':
+            elif command in ['run']:
                 VirtualInstance.run_file_command(current_directory, arg)
-            elif command == 'clear':
+            elif command in ['clear', 'cls']:
                 terminal.clear_terminal()
-                with open('assets/head2.txt', 'r', encoding="utf-8") as f:
-                    msg = colored(f.read().strip(), 'green', attrs=['bold'])
-                    print(msg)
-                print()
-            elif command == 'print':
+                print(f"{head_gda}\n")
+            elif command in ['print']:
                 VirtualInstance.print_file_command(current_directory, arg)
-            elif command == 'help':
+            elif command in ['help']:
                 VirtualInstance.help_command()
-            elif command == 'exit':
+            elif command in ['exit']:
                 terminal.clear_terminal()
                 exit(0)
+            elif command in ['execute']:
+                subprocess.call(x)
             else:
                 print("unknown command:", command)
         except NotImplementedError:
@@ -318,37 +100,39 @@ def server_hack_task():
 
 
 if __name__ == "__main__":
-    ENCRYPTION_KEY = ""
-    while ENCRYPTION_KEY == "":
-        ENCRYPTION_KEY = input("ENCRYPTION_KEY: ").strip()
-    print("ENCRYPTION_KEY is", ENCRYPTION_KEY)
-    input()
+    SOLUTIONS = Solutions(1)
     terminal.clear_terminal()
-    with open('assets/head.txt', 'r', encoding="utf-8") as f:
-        msg = colored(terminal.center(f.read()), 'green', attrs=['bold'])
-        print(msg)
+
+    # Show head text (SERVER LOGIN)
+    head_text = open_file_and_get_content('assets/head.txt')
+    print(terminal.bold_green_text(head_text))
+
+    # Login password guard block
     while True:
-        msg = colored("Enter " + IP + " password: ", 'yellow', attrs=['bold'])
-        x = input(msg)
+        x = input(terminal.bold_yellow_text(f"Enter {IP} password: "))
+
         print("Verifing password...")
-        if x == SERVER_PASSWORD:
+        if x == SOLUTIONS.server_login_password:
             terminal.show_progress(0.01, 100)
-            print()
-            print(colored("Logging in...", 'green'))
+            print(terminal.green_text("\nLogging in..."))
+
             terminal.show_progress(0.08, 100)
-            with open('assets/login.txt', 'r', encoding="utf-8") as f:
-                lines = f.readlines()
-                for i, line in enumerate(lines):
-                    if i % 50 == 0:
-                        time.sleep(0.05)
-                    print(line.strip())
-                    if i % 432 == 0:
-                        terminal.show_progress(0.009, random.randint(1, 75))
+
+            lines = open_file_and_get_content('assets/login.txt').split('\n')
+            for i, line in enumerate(lines):
+                if i % 50 == 0:
+                    time.sleep(0.05)
+                print(line.strip())
+                if i % 432 == 0:
+                    terminal.show_progress(0.009, random.randint(1, 75))
             terminal.show_progress(0.005, random.randint(1, 75))
             terminal.clear_terminal()
             time.sleep(2.0)
-            server_hack_task()
+            break
         else:
             terminal.show_progress(0.01, random.randint(1, 75))
-            print(colored("invalid password", 'red', attrs=['bold']))
+            print(terminal.bold_red_text("invalid password"))
         print()
+
+    # Start task
+    server_hack_task()

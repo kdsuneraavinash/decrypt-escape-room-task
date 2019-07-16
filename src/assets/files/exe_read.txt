@@ -1,0 +1,2 @@
+TIP:
+Reading unreadable files (ZIP/EXE/PDF/...) will show binary data. (Random unicode strings)

@@ -1,0 +1,1 @@
+camera.exe requires an encryption key which is an addition of 2 strings.

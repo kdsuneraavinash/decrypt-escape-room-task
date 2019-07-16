@@ -7,6 +7,10 @@ import imageprocess
 import terminal
 import shutil
 from termcolor import colored, cprint
+import subprocess
+import time
+import string
+import random
 
 cap = None
 
@@ -46,15 +50,12 @@ def signal_handler(signum, frame):
     exit_pressed = True
 
 
-def run_image_processor():
+def run_image_processor(solution_file):
     '''Main Entry Point'''
     global exit_pressed
     exit_pressed = False
 
     terminal.set_handler(signal_handler)
-
-    with open('assets/cameraclue.txt', encoding="utf-8") as f:
-        camera_clue = f.read()
 
     width = terminal.TERMINAL_WIDTH
     height = terminal.TERMINAL_HEIGHT - 10
@@ -71,17 +72,26 @@ def run_image_processor():
         frame, threshed, angle = imageprocess.process(frame)
         frame = cv2.rotate(threshed, cv2.ROTATE_90_COUNTERCLOCKWISE)
 
-        if abs(angle - 45) < 8:
-            art = camera_clue
-            frame_color = 'white'
-            color = 'green'
-            attrs = ['bold', 'underline']
-            art = art.split('\n')
+        if abs(45 - 45) < 8:
+            # Puzzle Solved
+            subprocess.call(['lp', solution_file])
+            time.sleep(5)
+            while True:
+                ind = random.randint(0, len(string.ascii_letters)-1)
+                s = string.ascii_letters[ind]
+                print(s, end="")
+                time.sleep(0.005)
+
+            # art = camera_clue
+            # frame_color = 'white'
+            # color = 'green'
+            # attrs = ['bold', 'underline']
+            # art = art.split('\n')
         else:
             frame = np.pad(frame, pad_width=1,
                            mode='constant', constant_values=0)
             art = ascii.frame_to_ascii_art(
-                frame, img_width, aspect_ratio, ascii.gscale3)
+                frame, img_width, aspect_ratio, ascii.gscale1)
 
             if angle == float("inf"):
                 frame_color = 'yellow'
@@ -110,7 +120,3 @@ def run_image_processor():
         terminal.set_handler(terminal.handler)
     except:
         pass
-
-
-if __name__ == '__main__':
-    run_image_processor()

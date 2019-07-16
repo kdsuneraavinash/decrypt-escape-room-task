@@ -1,0 +1,2 @@
+TIP:
+Servers, firewalls, and other IT equipment keep log files that record important events and transactions. Log data can also provide information for identifying and troubleshooting equipment problems including configuration problems and hardware failure.
