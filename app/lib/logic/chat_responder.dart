@@ -1,10 +1,15 @@
+import 'package:app/logic/states/init_state.dart';
 import 'package:flutter/material.dart';
+
+import 'chat_state.dart';
 
 class ChatResponder extends ChangeNotifier {
   List<ChatMessage> chatMessages = [];
+  ChatState state;
 
   ChatResponder() {
-    initMessage();
+    state = InitState();
+    sendMessage("");
   }
 
   void recieveMessage(String message) async {
@@ -19,7 +24,7 @@ class ChatResponder extends ChangeNotifier {
     chatMessages.add(chatMessage);
     notifyListeners();
 
-    await Future.delayed(Duration(milliseconds: 1400));
+    await Future.delayed(Duration(milliseconds: 800));
     chatMessage.delivered = true;
     notifyListeners();
 
@@ -27,30 +32,8 @@ class ChatResponder extends ChangeNotifier {
   }
 
   void sendMessage(String response) async {
-    await Future.delayed(Duration(milliseconds: 3000));
-    DateTime time = DateTime.now();
-
-    ChatMessage chatMessage = ChatMessage(
-        message: "Hollow",
-        delivered: true,
-        isResponse: true,
-        time: "${time.hour}:${time.minute}");
-
-    chatMessages.add(chatMessage);
-    notifyListeners();
-  }
-
-  void initMessage() async {
-    DateTime time = DateTime.now();
-    ChatMessage chatMessage = ChatMessage(
-        message:
-            'Hi... This is an automated message.\nCan you please enter your team name to validate your entry?',
-        delivered: true,
-        isResponse: true,
-        time: "${time.hour}:${time.minute}");
-
-    await Future.delayed(Duration(milliseconds: 300));
-    chatMessages.add(chatMessage);
+    await Future.delayed(Duration(milliseconds: 1000));
+    state.sendMessage(this);
     notifyListeners();
   }
 }
