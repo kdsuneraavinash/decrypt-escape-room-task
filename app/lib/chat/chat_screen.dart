@@ -37,6 +37,7 @@ class ChatScreen extends StatelessWidget {
               child: Align(
                 alignment: Alignment.topCenter,
                 child: ListView.builder(
+                    physics: BouncingScrollPhysics(),
                     shrinkWrap: true,
                     reverse: true,
                     itemCount: chatMessages.length,
