@@ -54,34 +54,6 @@ class ChatScreen extends StatelessWidget {
     );
   }
 
-  Widget escapeCode() {
-    return Container(
-      margin: EdgeInsets.all(4),
-      padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 1,
-            spreadRadius: 1,
-            color: Color(0x22000000),
-          )
-        ],
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(5.0),
-          bottomLeft: Radius.circular(10.0),
-          bottomRight: Radius.circular(5.0),
-        ),
-        image: DecorationImage(
-          image: NetworkImage(
-              "https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg"),
-          fit: BoxFit.cover,
-        ),
-      ),
-      height: 200,
-    );
-  }
-
   Widget uselessButton(IconData icon) {
     return Builder(
       builder: (context) => IconButton(

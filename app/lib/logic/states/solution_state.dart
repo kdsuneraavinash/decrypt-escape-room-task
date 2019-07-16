@@ -1,17 +1,26 @@
 import '../chat_responder.dart';
 import '../chat_state.dart';
 
-class TestState extends ChatState {
+class SolutionState extends ChatState {
+  final String imageUrl;
+  bool isSolutionSentOnce = false;
+
+  SolutionState(this.imageUrl);
+
   @override
   sendMessage(ChatResponder responder, String message) {
     DateTime time = DateTime.now();
 
     ChatMessage chatMessage = ChatMessage(
-        message: "Hollow",
+        message: imageUrl,
         delivered: true,
         isResponse: true,
+        isSolution: true,
         time: "${time.hour}:${time.minute}");
 
-    responder.chatMessages.add(chatMessage);
+    if (!isSolutionSentOnce) {
+      responder.chatMessages.add(chatMessage);
+      isSolutionSentOnce = true;
+    }
   }
 }

@@ -44,10 +44,12 @@ class ChatMessage {
     this.time,
     this.delivered,
     this.isResponse,
+    this.isSolution = false,
   });
 
   final String message;
   final String time;
   final bool isResponse;
   bool delivered;
+  final bool isSolution;
 }

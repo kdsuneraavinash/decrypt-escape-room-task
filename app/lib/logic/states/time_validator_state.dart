@@ -1,7 +1,7 @@
 import '../chat_responder.dart';
 import '../chat_state.dart';
 import '../data.dart';
-import 'test_state.dart';
+import 'solution_state.dart';
 
 class TimeValidatorState extends ChatState {
   final String teamName;
@@ -30,7 +30,8 @@ class TimeValidatorState extends ChatState {
     responder.chatMessages.add(chatMessage);
 
     if (isValid) {
-      responder.state = TestState();
+      responder.state = SolutionState(Data.data[teamName].imageUrl);
+      responder.state.sendMessage(responder, "");
     }
   }
 }
