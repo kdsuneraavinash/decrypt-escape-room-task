@@ -33,7 +33,7 @@ class ChatResponder extends ChangeNotifier {
 
   void sendMessage(String response) async {
     await Future.delayed(Duration(milliseconds: 1000));
-    state.sendMessage(this);
+    state.sendMessage(this, response);
     notifyListeners();
   }
 }

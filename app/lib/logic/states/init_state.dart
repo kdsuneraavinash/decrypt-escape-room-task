@@ -1,11 +1,11 @@
-import 'package:app/logic/chat_responder.dart';
-import 'package:app/logic/chat_state.dart';
+import '../chat_responder.dart';
+import '../chat_state.dart';
 
-import 'test_state.dart';
+import 'name_validator_state.dart';
 
 class InitState extends ChatState {
   @override
-  sendMessage(ChatResponder responder) {
+  sendMessage(ChatResponder responder, String message) {
     DateTime time = DateTime.now();
     ChatMessage chatMessage = ChatMessage(
         message:
@@ -15,6 +15,6 @@ class InitState extends ChatState {
         time: "${time.hour}:${time.minute}");
     responder.chatMessages.add(chatMessage);
 
-    responder.state = TestState();
+    responder.state = NameValidatorState();
   }
 }

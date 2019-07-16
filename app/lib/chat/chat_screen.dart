@@ -37,77 +37,14 @@ class ChatScreen extends StatelessWidget {
               child: Align(
                 alignment: Alignment.topCenter,
                 child: ListView.builder(
-                    physics: BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    reverse: true,
-                    itemCount: chatMessages.length,
-                    itemBuilder: (context, index) => ChatMessageWidget(
-                          chatMessage:
-                              chatMessages[chatMessages.length - 1 - index],
-                        )
-                    // ) ,
-
-                    //             children: <Widget>[
-                    //               ...[
-                    //                 responseMessage(
-                    //                   message:
-                    //                       'Hi... This is an automated message.\nCan you please enter your team name to validate your entry?',
-                    //                   time: '12:00',
-                    //                 ),
-                    //                 myMessageRead(
-                    //                   message: 'Team ODSDF',
-                    //                   time: '12:01',
-                    //                 ),
-                    //                 responseMessage(
-                    //                   message: "I'm sorry. The team name is not registered.",
-                    //                   time: '12:00',
-                    //                 ),
-                    //                 responseMessage(
-                    //                   message: "Please re-enter your team name.",
-                    //                   time: '12:00',
-                    //                 ),
-                    //                 myMessageRead(
-                    //                   message: 'Team NANE',
-                    //                   time: '12:00',
-                    //                 ),
-                    //                 responseMessage(
-                    //                   message: 'Team found... Registering team name...',
-                    //                   time: '12:01',
-                    //                 ),
-                    //                 responseMessage(
-                    //                   message: 'Record ERREORO',
-                    //                   time: '12:01',
-                    //                 ),
-                    //                 responseMessage(
-                    //                   message:
-                    //                       'Please enter the time you enetered the building to confirm your identity (Format HH:MM)',
-                    //                   time: '12:01',
-                    //                 ),
-                    //                 myMessageRead(
-                    //                   message: '8:00',
-                    //                   time: '12:00',
-                    //                 ),
-                    //                 responseMessage(
-                    //                   message: 'Record Mismatch... Please re-enter time.',
-                    //                   time: '12:01',
-                    //                 ),
-                    //                 myMessageRead(
-                    //                   message: '12:30',
-                    //                   time: '12:00',
-                    //                 ),
-                    //                 responseMessage(
-                    //                   message: 'Record Matched.',
-                    //                   time: '12:01',
-                    //                 ),
-                    //                 responseMessage(
-                    //                   message: 'Your code is sent.',
-                    //                   time: '12:01',
-                    //                 ),
-                    //                 escapeCode(),
-                    //               ],
-
-                    //             ],
-                    ),
+                  physics: BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  reverse: true,
+                  itemCount: chatMessages.length,
+                  itemBuilder: (context, index) => ChatMessageWidget(
+                    chatMessage: chatMessages[chatMessages.length - 1 - index],
+                  ),
+                ),
               ),
             ),
             ChatTextBox()

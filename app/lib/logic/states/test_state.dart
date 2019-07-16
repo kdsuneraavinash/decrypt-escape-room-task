@@ -1,9 +1,9 @@
-import 'package:app/logic/chat_responder.dart';
-import 'package:app/logic/chat_state.dart';
+import '../chat_responder.dart';
+import '../chat_state.dart';
 
 class TestState extends ChatState {
   @override
-  sendMessage(ChatResponder responder) {
+  sendMessage(ChatResponder responder, String message) {
     DateTime time = DateTime.now();
 
     ChatMessage chatMessage = ChatMessage(
