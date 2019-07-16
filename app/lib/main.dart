@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'chat_responder.dart';
+import 'logic/chat_responder.dart';
 import 'progress_screen.dart';
 
 void main() => runApp(MyApp());

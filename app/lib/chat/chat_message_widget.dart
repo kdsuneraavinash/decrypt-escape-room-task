@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../chat_responder.dart';
+import '../logic/chat_responder.dart';
 
 class ChatMessageWidget extends StatelessWidget {
   ChatMessageWidget({

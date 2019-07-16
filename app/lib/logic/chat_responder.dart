@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 class ChatResponder extends ChangeNotifier {
   List<ChatMessage> chatMessages = [];
 
+  ChatResponder() {
+    initMessage();
+  }
+
   void recieveMessage(String message) async {
     DateTime time = DateTime.now();
 
@@ -32,6 +36,20 @@ class ChatResponder extends ChangeNotifier {
         isResponse: true,
         time: "${time.hour}:${time.minute}");
 
+    chatMessages.add(chatMessage);
+    notifyListeners();
+  }
+
+  void initMessage() async {
+    DateTime time = DateTime.now();
+    ChatMessage chatMessage = ChatMessage(
+        message:
+            'Hi... This is an automated message.\nCan you please enter your team name to validate your entry?',
+        delivered: true,
+        isResponse: true,
+        time: "${time.hour}:${time.minute}");
+
+    await Future.delayed(Duration(milliseconds: 300));
     chatMessages.add(chatMessage);
     notifyListeners();
   }
