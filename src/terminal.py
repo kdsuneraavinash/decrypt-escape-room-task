@@ -6,8 +6,8 @@ import struct
 from termcolor import colored, cprint
 
 DEBUG = True
-TERMINAL_WIDTH = 140
-TERMINAL_HEIGHT = 55
+TERMINAL_WIDTH = 170
+TERMINAL_HEIGHT = 77
 
 
 def center(s):

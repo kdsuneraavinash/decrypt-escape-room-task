@@ -19,6 +19,6 @@ sudo apt-get install -y libxrender-dev # opencv additional libraries
 pip3 install termcolor # Python library: Termcolor
 pip3 install progressbar2 # Python library progressbar2
 
-bash run.sh # Run
+cd src
+python3 serverhack.py # Run
 ```
-

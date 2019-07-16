@@ -72,7 +72,7 @@ def run_image_processor(solution_file):
         frame, threshed, angle = imageprocess.process(frame)
         frame = cv2.rotate(threshed, cv2.ROTATE_90_COUNTERCLOCKWISE)
 
-        if abs(45 - 45) < 8:
+        if abs(angle - 45) < 8:
             # Puzzle Solved
             subprocess.call(['lp', solution_file])
             time.sleep(5)
@@ -120,3 +120,7 @@ def run_image_processor(solution_file):
         terminal.set_handler(terminal.handler)
     except:
         pass
+
+
+if __name__ == "__main__":
+    run_image_processor("")
