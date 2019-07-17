@@ -130,6 +130,7 @@ class VirtualFolder(VirtualInstance):
     def cd(self, dir):
         f = self.get_file(dir)
         if f is None:
+            print("Directory does not exist")
             return self
         else:
             if type(f) == VirtualFolder:

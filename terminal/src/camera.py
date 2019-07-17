@@ -15,7 +15,7 @@ import random
 cap = None
 
 
-def getCameraFrame(source=0):
+def getCameraFrame(source=1):
     '''Returns camera video frame from video source'''
 
     global cap
@@ -114,7 +114,7 @@ def run_image_processor(solution_file):
 
         art = terminal.center(art)
         text = "="*width + '\n'
-        text += "Press CTRL+C to exit..\n"
+        text += "Streaming CAMERA 1: Searching for the correct Symbol\nPress CTRL+C to exit..\n"
         text += "="*width + '\n\n'
         text = terminal.center(text)
         text += "Output[]: " + \
