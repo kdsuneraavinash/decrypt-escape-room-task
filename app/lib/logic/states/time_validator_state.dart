@@ -16,7 +16,7 @@ class TimeValidatorState extends ChatState {
     if (Data.data[teamName].time == message.trim()) {
       response = "Record Matched..\n\n"
           'Your code is sent.';
-      nextState = SolutionState(Data.data[teamName].imageUrl);
+      nextState = SolutionState(Data.data[teamName].solution);
     } else {
       response = "Record Mismatch... Please re-enter time.";
       nextState = this;

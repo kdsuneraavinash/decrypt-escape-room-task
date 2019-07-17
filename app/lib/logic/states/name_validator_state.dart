@@ -9,13 +9,15 @@ class NameValidatorState extends ChatState {
     String response;
     ChatState nextState;
 
+    message = message.toUpperCase();
+
     if (Data.data.containsKey(message.trim())) {
-      response = "Team found... Registered team name...\n\n"
-          'Please enter the time you enetered the building to confirm your identity (Format HH:MM)';
+      response = "Team found... Registered E group...\n\n"
+          'Please enter the correct time. (Format HH:MM)';
       nextState = TimeValidatorState(message.trim());
     } else {
       response =
-          "I'm sorry. The team name is not registered.\nPlease re-enter your team name.";
+          "I'm sorry. The E group is not registered.\nPlease re-enter your E group.";
       nextState = this;
     }
 

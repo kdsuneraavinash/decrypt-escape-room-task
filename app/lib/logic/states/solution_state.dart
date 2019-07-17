@@ -15,6 +15,11 @@ class SolutionState extends ChatState {
       isSolutionSentOnce = true;
       await wait(1000);
       chatMessage.finishTyping(responder);
+
+      chatMessage = composeMessage("Good Luck with your Journey!");
+      responder.addChatMessage(chatMessage);
+      await wait(1000);
+      chatMessage.finishTyping(responder);
     }
   }
 }

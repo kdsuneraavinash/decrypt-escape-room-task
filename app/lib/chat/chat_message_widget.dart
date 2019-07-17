@@ -84,7 +84,7 @@ class ChatMessageWidget extends StatelessWidget {
     );
   }
 
-  Widget escapeCode(String imageUrl) {
+  Widget escapeCode(String solutionCode) {
     return Container(
       margin: EdgeInsets.all(4),
       padding: EdgeInsets.all(8),
@@ -96,18 +96,24 @@ class ChatMessageWidget extends StatelessWidget {
             color: Color(0x22000000),
           )
         ],
-        color: Colors.white,
+        color: Colors.black,
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(5.0),
           bottomLeft: Radius.circular(10.0),
           bottomRight: Radius.circular(5.0),
         ),
-        image: DecorationImage(
-          image: AssetImage("assets/solutions/pexels-photo-414612.jpeg"),
-          fit: BoxFit.cover,
+      ),
+      alignment: Alignment.center,
+      height: 200,
+      child: Text(
+        solutionCode,
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w800,
+          fontSize: 86,
+          letterSpacing: 20,
         ),
       ),
-      height: 200,
     );
   }
 

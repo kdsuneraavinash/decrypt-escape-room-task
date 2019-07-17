@@ -8,7 +8,7 @@ class InitState extends ChatState {
   sendMessage(ChatResponder responder, String message) async {
     ChatMessage chatMessage = composeMessage(
         'Hi... This is an automated message.\n'
-        'Can you please enter your team name to validate your entry?',
+        'Can you please enter your E group name to validate your entry?',
         true,
         false);
 
