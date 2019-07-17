@@ -10,33 +10,28 @@ class TimeValidatorState extends ChatState {
 
   @override
   sendMessage(ChatResponder responder, String message) async {
-    DateTime time = DateTime.now();
-    bool isValid = false;
-    String response = "Record Mismatch... Please re-enter time.";
+    String response;
+    ChatState nextState;
 
-    isValid = Data.data[teamName].time == message.trim();
-
-    if (isValid) {
+    if (Data.data[teamName].time == message.trim()) {
       response = "Record Matched..\n\n"
           'Your code is sent.';
+      nextState = SolutionState(Data.data[teamName].imageUrl);
+    } else {
+      response = "Record Mismatch... Please re-enter time.";
+      nextState = this;
     }
 
-    ChatMessage chatMessage = ChatMessage(
-        message: response,
-        delivered: true,
-        isResponse: true,
-        time: "${time.hour}:${time.minute}");
+    ChatMessage chatMessage = composeMessage(response);
+    responder.addChatMessage(chatMessage);
 
-    responder.chatMessages.add(chatMessage);
+    await wait(3000);
 
-    responder.updated();
-    await Future.delayed(Duration(seconds: 3));
-    chatMessage.finishTyping();
-    responder.updated();
+    chatMessage.finishTyping(responder);
+    responder.changeState(nextState);
 
-    if (isValid) {
-      responder.state = SolutionState(Data.data[teamName].imageUrl);
-      responder.state.sendMessage(responder, "");
+    if (nextState is SolutionState) {
+      nextState.sendMessage(responder, null);
     }
   }
 }

@@ -6,33 +6,25 @@ import 'time_validator_state.dart';
 class NameValidatorState extends ChatState {
   @override
   sendMessage(ChatResponder responder, String message) async {
-    DateTime time = DateTime.now();
-    bool isValid = false;
-    String response =
-        "I'm sorry. The team name is not registered.\nPlease re-enter your team name.";
+    String response;
+    ChatState nextState;
 
-    isValid = (Data.data.containsKey(message.trim()));
-
-    if (isValid) {
+    if (Data.data.containsKey(message.trim())) {
       response = "Team found... Registered team name...\n\n"
           'Please enter the time you enetered the building to confirm your identity (Format HH:MM)';
+      nextState = TimeValidatorState(message.trim());
+    } else {
+      response =
+          "I'm sorry. The team name is not registered.\nPlease re-enter your team name.";
+      nextState = this;
     }
 
-    ChatMessage chatMessage = ChatMessage(
-        message: response,
-        delivered: true,
-        isResponse: true,
-        time: "${time.hour}:${time.minute}");
+    ChatMessage chatMessage = composeMessage(response);
+    responder.addChatMessage(chatMessage);
 
-    responder.chatMessages.add(chatMessage);
+    await wait(2000);
 
-    responder.updated();
-    await Future.delayed(Duration(seconds: 2));
-    chatMessage.finishTyping();
-    responder.updated();
-
-    if (isValid) {
-      responder.state = TimeValidatorState(message.trim());
-    }
+    chatMessage.finishTyping(responder);
+    responder.changeState(nextState);
   }
 }

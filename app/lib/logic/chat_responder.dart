@@ -23,12 +23,11 @@ class ChatResponder extends ChangeNotifier {
         isResponse: false,
         time: "${time.hour}:${time.minute}");
 
-    chatMessages.add(chatMessage);
-    updated();
+    addChatMessage(chatMessage);
 
     await Future.delayed(Duration(milliseconds: 800));
     chatMessage.delivered = true;
-    updated();
+    updateUI();
 
     sendMessage(message);
   }
@@ -36,11 +35,20 @@ class ChatResponder extends ChangeNotifier {
   void sendMessage(String response) async {
     await Future.delayed(Duration(milliseconds: 1000));
     await state.sendMessage(this, response);
-    updated();
+    updateUI();
   }
 
-  updated() {
+  void addChatMessage(ChatMessage message) {
+    chatMessages.add(message);
+    updateUI();
+  }
+
+  void updateUI() {
     notifyListeners();
+  }
+
+  void changeState(ChatState state) {
+    this.state = state;
   }
 }
 
@@ -54,8 +62,9 @@ class ChatMessage {
     this.isTyping = true,
   });
 
-  finishTyping() {
+  finishTyping(ChatResponder responder) {
     isTyping = false;
+    responder.updateUI();
   }
 
   final String message;

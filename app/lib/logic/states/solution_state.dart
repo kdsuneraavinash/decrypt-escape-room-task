@@ -9,23 +9,12 @@ class SolutionState extends ChatState {
 
   @override
   sendMessage(ChatResponder responder, String message) async {
-    DateTime time = DateTime.now();
-
-    ChatMessage chatMessage = ChatMessage(
-        message: imageUrl,
-        delivered: true,
-        isResponse: true,
-        isSolution: true,
-        time: "${time.hour}:${time.minute}");
-
     if (!isSolutionSentOnce) {
-      responder.chatMessages.add(chatMessage);
+      ChatMessage chatMessage = composeMessage(imageUrl, false, true, true);
+      responder.addChatMessage(chatMessage);
       isSolutionSentOnce = true;
+      await wait(1000);
+      chatMessage.finishTyping(responder);
     }
-
-    responder.updated();
-    await Future.delayed(Duration(seconds: 1));
-    chatMessage.finishTyping();
-    responder.updated();
   }
 }
