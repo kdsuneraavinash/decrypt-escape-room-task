@@ -28,11 +28,11 @@ class ChatScreen extends StatelessWidget {
           uselessButton(Icons.call),
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          children: <Widget>[
-            Expanded(
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Align(
                 alignment: Alignment.topCenter,
                 child: ListView.builder(
@@ -46,9 +46,9 @@ class ChatScreen extends StatelessWidget {
                 ),
               ),
             ),
-            ChatTextBox()
-          ],
-        ),
+          ),
+          ChatTextBox()
+        ],
       ),
     );
   }

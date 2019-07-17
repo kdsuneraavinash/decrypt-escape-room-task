@@ -50,6 +50,7 @@ class _ChatTextBoxState extends State<ChatTextBox> {
           ),
         ],
       ),
+      padding: EdgeInsets.symmetric(horizontal: 16.0),
       width: double.infinity,
       height: 50.0,
       decoration: BoxDecoration(
