@@ -50,7 +50,7 @@ def server_hack_task():
     folder2 = VirtualFolder('usr', [fake_file_2, fake_file_3], None)
     folder3 = VirtualFolder('lib', [fake_file_5], None)
     root = VirtualFolder(
-        '', [cam_file, folder1, folder2, folder3, fake_file_4], None)
+        '', [printable_file, cam_file, folder1, folder2, folder3, fake_file_4], None)
     folder1.parent = root
     folder2.parent = root
     folder3.parent = root

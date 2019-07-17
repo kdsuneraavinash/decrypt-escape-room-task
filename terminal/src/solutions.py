@@ -10,4 +10,4 @@ class Solutions:
         self.encryption_key = open_file_and_get_content(
             f'{self.group_dir}/encryption_key.txt')
         self.first_clue_pdf = f'{self.group_dir}/first_clue.pdf'
-        self.image_recognition_pdf = f'{self.group_dir}/camera.pdf'
+        self.image_recognition_pdf = f'{self.group_dir}/camera.txt'

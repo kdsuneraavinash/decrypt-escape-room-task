@@ -66,8 +66,12 @@ def run_image_processor(solution_file):
     while not exit_pressed:
         if detected:
             art = ""
-            with open("assets/cameraclue.txt", 'r', encoding="utf-8") as f:
-                art = f.read().strip()
+            with open(solution_file, 'r', encoding="utf-8") as f:
+                art = f.read()
+            tmp_art = ""
+            for line in art.split('\n'):
+                tmp_art += f"{line}\n"
+            art = tmp_art
 
             frame_color = 'white'
             color = 'green'
@@ -86,8 +90,8 @@ def run_image_processor(solution_file):
 
             if detected or abs(angle - 45) < 8:
                 # Puzzle Solved
-                print("Detected... Printing...", solution_file)
-                subprocess.call(['lp', solution_file])
+                # print("Detected... Printing...", solution_file)
+                # subprocess.call(['lp', solution_file])
                 time.sleep(1)
                 terminal.clear_terminal()
                 time.sleep(1)

@@ -181,7 +181,7 @@ class TextFile(VirtualFile):
         return self.content
 
     def print(self):
-        print("text file is not a valid prinatable file")
+        print("text file is not a valid printable file")
         return True
 
 
@@ -200,7 +200,7 @@ class PrintableFile(VirtualFile):
         self.clue_file = clue_file
 
     def print(self):
-        subprocess.call(['lp', clue_file])
+        subprocess.call(['lp', self.clue_file])
         return True
 
 
