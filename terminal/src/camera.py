@@ -15,7 +15,7 @@ import random
 cap = None
 
 
-def getCameraFrame(source=1):
+def getCameraFrame(source=0):
     '''Returns camera video frame from video source'''
 
     global cap
